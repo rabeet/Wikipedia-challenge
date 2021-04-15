@@ -6,6 +6,8 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * In the English language wikipedia, repeatedly clicking on the first link in the main body of an article will eventually lead to the Philosophy page in a large fraction of cases. This phenomena is documented here: https://en.wikipedia.org/wiki/Wikipedia:Getting_to_Philosophy
@@ -17,9 +19,10 @@ public class Wikipediafetcher {
 
     private static final String RANDOM_URL = "https://en.wikipedia.org/wiki/Special:Random";
     private static final String PHILOSOPHY_URL = "https://en.wikipedia.org/wiki/Philosophy";
+    private static Set<String> set = new HashSet<>();
 
     public static void main(String[] args) throws Exception {
-        run("https://en.wikipedia.org/wiki/Simplified_Chinese_characters");
+        run(RANDOM_URL);
     }
 
     /**
@@ -52,7 +55,7 @@ public class Wikipediafetcher {
 
     private static boolean isValidLink(Element link) {
         String text = link.toString();
-        return !text.contains("Greek") && !text.contains("Latin") && !text.contains("wikitionary");
+        return !text.contains("upload") && !text.contains("Greek") && !text.contains("Latin") && !text.contains("wiktionary") && set.add(link.absUrl("href"));
     }
 
 }
