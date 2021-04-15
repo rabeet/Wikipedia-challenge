@@ -21,15 +21,25 @@ public class Wikipediafetcher {
     private static final String PHILOSOPHY_URL = "https://en.wikipedia.org/wiki/Philosophy";
     private static Set<String> set = new HashSet<>();
 
-    public static void main(String[] args) throws Exception {
-        run(RANDOM_URL);
+    public static void main(String[] args)  {
+        int max = -1;
+        for (int i = 0; i < 100; i++) {
+            try {
+                max = Math.max(max, run(RANDOM_URL));
+            } catch (Exception e) {
+                System.err.println("Unable to fetch page - retrying");
+            }
+            System.out.println();
+        }
+
+        System.out.println("MAX: " + max);
     }
 
     /**
      * Start the philosophy loop based on the given url
      * @param url
      */
-    private static void run(String url) throws IOException {
+    private static int run(String url) throws IOException {
         int i = 0;
         while (i++ < 100 && !url.equals(PHILOSOPHY_URL)) {
             System.out.println(i + ": " + url);
@@ -37,6 +47,7 @@ public class Wikipediafetcher {
             url = getFirstValidLink(doc);
         }
         System.out.println(i + ": " + url);
+        return i;
     }
 
     /**
